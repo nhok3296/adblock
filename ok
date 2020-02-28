@@ -1,0 +1,707 @@
+background: var(--background-image)
+custom_header:
+  compact_mode: true
+  editor_warnings: false
+resources:
+  - type: module
+    url: /local/button-card.js
+  - type: js
+    url: /local/lunar_day.js
+  - type: module
+    url: /community_plugin/simple-thermostat/simple-thermostat.js
+  - type: module
+    url: /community_plugin/banner-card/banner-card.js
+  - type: module
+    url: /community_plugin/mini-media-player/mini-media-player-bundle.js
+  - type: module
+    url: /community_plugin/button-card/button-card.js
+  - type: js
+    url: /community_plugin/lovelace-swipe-navigation/swipe-navigation.js
+title: Smarthome
+views:
+  - badges: []
+    cards:
+      - cards:
+          - background: '#33B5FF'
+            entities:
+              - entity: sensor.0x00158d00032253f8_temperature
+              - entity: sensor.0x00158d00032253f8_humidity
+              - entity: sensor.cuachinh
+            heading:
+              - 'mdi:sofa'
+              - Phòng Khách
+            type: 'custom:banner-card'
+          - cards:
+              - entity: media_player.nhac
+                hide:
+                  power: true
+                speaker_group:
+                  entities:
+                    - entity_id: media_player.nhac
+                      name: Master
+                    - entity_id: media_player.googlehome9821
+                      name: Google Home
+                    - entity_id: media_player.phong_ngu_1
+                      name: Google Home Mini
+                  platform: snapcast
+                  show_group_count: true
+                type: 'custom:mini-media-player'
+            type: horizontal-stack
+          - cards:
+              - aspect_ratio: 1/1
+                custom_fields:
+                  cpu: |
+                    [[[
+                      return `<ha-icon
+                        icon="mdi:server"
+                        style="width: 12px; height: 12px; color: deepskyblue;">
+                        </ha-icon><span>CPU: <span style="color: var(--text-color-sensor);">${states['sensor.processor_use'].state}%</span></span>`
+                    ]]]
+                  ram: |
+                    [[[
+                      return `<ha-icon
+                        icon="mdi:memory"
+                        style="width: 12px; height: 12px; color: deepskyblue;">
+                        </ha-icon><span>RAM: <span style="color: var(--text-color-sensor);">${states['sensor.memory_use_percent'].state}%</span></span>`
+                    ]]]
+                  sd: |
+                    [[[
+                      return `<ha-icon
+                        icon="mdi:harddisk"
+                        style="width: 12px; height: 12px; color: deepskyblue;">
+                        </ha-icon><span>SD: <span style="color: var(--text-color-sensor);">${states['sensor.disk_use_percent_home'].state}%</span></span>`
+                    ]]]
+                  temp: |
+                    [[[
+                      return `<ha-icon
+                        icon="mdi:thermometer"
+                        style="width: 12px; height: 12px; color: yellow;">
+                        </ha-icon><span>${entity.state}°C</span>`
+                    ]]]
+                entity: sensor.cpu_temperature
+                icon: 'mdi:raspberry-pi'
+                name: Raspberry
+                styles:
+                  card:
+                    - background-color: '#000044'
+                    - border-radius: 5%
+                    - padding: 10%
+                    - color: ivory
+                    - font-size: 8px
+                    - text-shadow: 0px 0px 5px black
+                    - text-transform: capitalize
+                  custom_fields:
+                    cpu:
+                      - padding-bottom: 2px
+                      - align-self: middle
+                      - justify-self: start
+                      - '--text-color-sensor': >-
+                          [[[ if (states["sensor.processor_use"].state > 80)
+                          return "red"; ]]]
+                    ram:
+                      - padding-bottom: 2px
+                      - align-self: middle
+                      - justify-self: start
+                      - '--text-color-sensor': >-
+                          [[[ if (states["sensor.memory_use_percent"].state >
+                          80) return "red"; ]]]
+                    sd:
+                      - align-self: middle
+                      - justify-self: start
+                      - '--text-color-sensor': >-
+                          [[[ if (states["sensor.disk_use_percent_home"].state >
+                          80) return "red"; ]]]
+                    temp:
+                      - align-self: start
+                      - justify-self: end
+                  grid:
+                    - grid-template-areas: '"i temp" "n n" "cpu cpu" "ram ram" "sd sd"'
+                    - grid-template-columns: 1fr 1fr
+                    - grid-template-rows: 1fr min-content min-content min-content min-content
+                  icon:
+                    - color: |
+                        [[[
+                          if (entity.state < 60) return 'lime';
+                          if (entity.state >= 60 && entity.state < 80) return 'orange';
+                          else return 'red';
+                        ]]]
+                    - width: 70%
+                    - margin-top: '-10%'
+                  img_cell:
+                    - justify-content: start
+                    - align-items: start
+                    - margin: none
+                  name:
+                    - font-weight: bold
+                    - font-size: 13px
+                    - color: white
+                    - align-self: middle
+                    - justify-self: start
+                    - padding-bottom: 4px
+                type: 'custom:button-card'
+              - aspect_ratio: 1/1
+                color: 'rgb(240, 227, 75)'
+                color_type: card
+                entity: group.fan_boss
+                hold_action:
+                  action: more-info
+                styles:
+                  card:
+                    - border-radius: 10%
+                tap_action:
+                  action: toggle
+                type: 'custom:button-card'
+              - aspect_ratio: 1/1
+                color: 'rgb(240, 227, 75)'
+                color_type: card
+                entity: switch.pk_1
+                styles:
+                  card:
+                    - border-radius: 10%
+                type: 'custom:button-card'
+              - aspect_ratio: 1/1
+                color: 'rgb(240, 227, 75)'
+                color_type: card
+                entity: group.light
+                hold_action:
+                  action: more-info
+                styles:
+                  card:
+                    - border-radius: 10%
+                tap_action:
+                  action: toggle
+                type: 'custom:button-card'
+            type: horizontal-stack
+        type: vertical-stack
+      - cards:
+          - background: '#33FF7A'
+            heading:
+              - 'mdi:silverware-fork-knife'
+              - Phòng Bếp
+            type: 'custom:banner-card'
+          - cards:
+              - aspect_ratio: 1/1
+                color: 'rgb(240, 227, 75)'
+                color_type: card
+                entity: switch.bep_2
+                styles:
+                  card:
+                    - border-radius: 10%
+                type: 'custom:button-card'
+              - aspect_ratio: 1/1
+                color: 'rgb(240, 227, 75)'
+                color_type: card
+                entity: group.fan_asia
+                hold_action:
+                  action: more-info
+                styles:
+                  card:
+                    - border-radius: 10%
+                tap_action:
+                  action: toggle
+                type: 'custom:button-card'
+              - aspect_ratio: 1/1
+                color: 'rgb(240, 227, 75)'
+                color_type: card
+                entity: switch.wc_3
+                styles:
+                  card:
+                    - border-radius: 10%
+                type: 'custom:button-card'
+              - aspect_ratio: 1/1
+                color: 'rgb(240, 227, 75)'
+                color_type: card
+                entity: switch.bep_1
+                styles:
+                  card:
+                    - border-radius: 10%
+                type: 'custom:button-card'
+            type: horizontal-stack
+        type: vertical-stack
+      - cards:
+          - background: '#CD4864'
+            entities:
+              - entity: sensor.cuabancong
+              - entity: sensor.cuawc
+              - entity: binary_sensor.0x00158d0002f98ec8_occupancy
+            heading:
+              - 'mdi:paper-roll-outline'
+              - Nhà Vệ sinh
+            type: 'custom:banner-card'
+          - cards:
+              - aspect_ratio: 1/1
+                color: 'rgb(240, 227, 75)'
+                color_type: card
+                entity: switch.wc_1
+                styles:
+                  card:
+                    - border-radius: 10%
+                type: 'custom:button-card'
+              - aspect_ratio: 1/1
+                color: 'rgb(240, 227, 75)'
+                color_type: card
+                entity: switch.wc_2
+                styles:
+                  card:
+                    - border-radius: 10%
+                type: 'custom:button-card'
+              - aspect_ratio: 1/1
+                color: 'rgb(240, 227, 75)'
+                color_type: card
+                entity: switch.cua_2
+                name: Nước nóng
+                styles:
+                  card:
+                    - border-radius: 10%
+                type: 'custom:button-card'
+              - aspect_ratio: 1/1
+                color: 'rgb(240, 227, 75)'
+                color_type: card
+                entity: switch.cua_1
+                styles:
+                  card:
+                    - border-radius: 10%
+                type: 'custom:button-card'
+            type: horizontal-stack
+        type: vertical-stack
+      - entities:
+          - entity: fan.xiaomi_miio_device
+        type: entities
+      - entities:
+          - entity: vacuum.xiaomi_vacuum_cleaner
+        type: entities
+    icon: 'mdi:home'
+    panel: false
+    path: default_view
+    title: Nhà
+  - badges: []
+    cards:
+      - cards:
+          - background: '#33A7AD'
+            entities:
+              - entity: sensor.0x00158d00033b04c7_temperature
+              - entity: sensor.0x00158d00033b04c7_humidity
+              - entity: input_number.fan_speed1
+                map_state:
+                  not_playing:
+                    name: A custom entity heading
+                    value: 'mdi:stop'
+                  playing: 'mdi:disc-player'
+            heading:
+              - 'mdi:bed-empty'
+              - Phòng Nguyễn
+            type: 'custom:banner-card'
+          - cards:
+              - entity: media_player.googlehomehub6623
+                type: 'custom:mini-media-player'
+            type: horizontal-stack
+          - cards:
+              - aspect_ratio: 1/1
+                color: 'rgb(240, 227, 75)'
+                color_type: card
+                entity: switch.pn1_1
+                styles:
+                  card:
+                    - border-radius: 10%
+                tap_action:
+                  action: toggle
+                type: 'custom:button-card'
+              - aspect_ratio: 1/1
+                color: 'rgb(240, 227, 75)'
+                color_type: card
+                entity: switch.pn1_2
+                styles:
+                  card:
+                    - border-radius: 10%
+                tap_action:
+                  action: toggle
+                type: 'custom:button-card'
+              - aspect_ratio: 1/1
+                color: 'rgb(240, 227, 75)'
+                color_type: card
+                entity: media_player.living_room_tv
+                hold_action:
+                  action: more-info
+                styles:
+                  card:
+                    - border-radius: 10%
+                tap_action:
+                  action: toggle
+                type: 'custom:button-card'
+              - aspect_ratio: 1/1
+                color: 'rgb(240, 227, 75)'
+                color_type: card
+                entity: media_player.playstation_4
+                hold_action:
+                  action: more-info
+                name: PS4
+                styles:
+                  card:
+                    - border-radius: 10%
+                tap_action:
+                  action: toggle
+                type: 'custom:button-card'
+            type: horizontal-stack
+        type: vertical-stack
+      - control: true
+        entity: climate.ac_1
+        icon: true
+        name: false
+        type: 'custom:simple-thermostat'
+    icon: 'mdi:hotel'
+    panel: false
+    path: phongngu
+    title: Phòng ngủ
+  - badges: []
+    cards:
+      - cards:
+          - background: '#C14D15'
+            entities:
+              - entity: sensor.0x00158d000316065d_temperature
+              - entity: sensor.0x00158d000316065d_humidity
+              - entity: sensor.0x00158d00035fec72_illuminance
+            heading:
+              - 'mdi:bed-empty'
+              - Phòng Bố mẹ
+            type: 'custom:banner-card'
+          - cards:
+              - aspect_ratio: 1/1
+                color: 'rgb(240, 227, 75)'
+                color_type: card
+                entity: switch.pn2_1
+                name: Đèn
+                styles:
+                  card:
+                    - border-radius: 10%
+                type: 'custom:button-card'
+              - aspect_ratio: 1/1
+                color: 'rgb(240, 227, 75)'
+                color_type: card
+                entity: switch.pn2_2
+                name: Quạt
+                styles:
+                  card:
+                    - border-radius: 10%
+                type: 'custom:button-card'
+              - aspect_ratio: 1/1
+                color: 'rgb(240, 227, 75)'
+                color_type: card
+                entity: input_number.fan_speed2
+                name: Điều chỉnh tốc độ
+                styles:
+                  card:
+                    - border-radius: 10%
+                tap_action:
+                  action: more-info
+                type: 'custom:button-card'
+            type: horizontal-stack
+        type: vertical-stack
+      - control: true
+        entity: climate.ac_2_2
+        icon: false
+        name: false
+        type: 'custom:simple-thermostat'
+    icon: 'mdi:hotel'
+    path: phongngubome
+    title: Phòng ngủ Bố mẹ
+  - badges: []
+    cards:
+      - type: 'custom:lunar-day'
+      - entity: weather.dark_sky
+        name: Thời tiết
+        type: weather-forecast
+    icon: 'mdi:calendar-month-outline'
+    path: lichvannien
+  - badges: []
+    cards:
+      - elements:
+          - entity: switch.wc_2
+            state_image:
+              'off': /local/images/light_off.png
+              'on': /local/images/light_on.png
+            style:
+              left: 22%
+              top: 10%
+              width: 7%
+            tap_action:
+              action: toggle
+            type: image
+          - entity: switch.wc_1
+            state_image:
+              'off': /local/images/fan.png
+              'on': /local/images/fan-gif.gif
+            style:
+              left: 6%
+              top: 15%
+              width: 7%
+            tap_action:
+              action: toggle
+            type: image
+          - entity: switch.pn1_2
+            state_image:
+              'off': /local/images/fan.png
+              'on': /local/images/fan-gif.gif
+            style:
+              left: 94%
+              top: 80%
+              width: 7%
+            tap_action:
+              action: toggle
+            type: image
+          - entity: switch.pn1_1
+            state_image:
+              'off': /local/images/light_off.png
+              'on': /local/images/light_on.png
+            style:
+              left: 70%
+              top: 79%
+              width: 7%
+            tap_action:
+              action: toggle
+            type: image
+          - entity: switch.pn2_2
+            state_image:
+              'off': /local/images/fan.png
+              'on': /local/images/fan-gif.gif
+            style:
+              left: 94%
+              top: 20%
+              width: 7%
+            tap_action:
+              action: toggle
+            type: image
+          - entity: switch.pn2_1
+            state_image:
+              'off': /local/images/light_off.png
+              'on': /local/images/light_on.png
+            style:
+              left: 70%
+              top: 20%
+              width: 7%
+            tap_action:
+              action: toggle
+            type: image
+          - entity: switch.pk_2
+            state_image:
+              'off': /local/images/light_off.png
+              'on': /local/images/light_on.png
+            style:
+              left: 45%
+              top: 76%
+              width: 7%
+            tap_action:
+              action: toggle
+            type: image
+          - entity: switch.bep_2
+            state_image:
+              'off': /local/images/light_off.png
+              'on': /local/images/light_on.png
+            style:
+              left: 11%
+              top: 80%
+              width: 7%
+            tap_action:
+              action: toggle
+            type: image
+          - entity: switch.bep_1
+            state_image:
+              'off': /local/images/light_off.png
+              'on': /local/images/light_on.png
+            style:
+              left: 25%
+              top: 24%
+              width: 7%
+            tap_action:
+              action: toggle
+            type: image
+          - entity: switch.wc_3
+            state_image:
+              'off': /local/images/light_off.png
+              'on': /local/images/light_on.png
+            style:
+              left: 53%
+              top: 6%
+              width: 7%
+            tap_action:
+              action: toggle
+            type: image
+          - entity: binary_sensor.0x00158d0002e75db8_contact
+            state_image:
+              'off': /local/images/door1.png
+              'on': /local/images/door_open.png
+            style:
+              left: 53%
+              top: 0.9%
+              width: 9%
+            type: image
+          - entity: binary_sensor.0x00158d0002c1787d_contact
+            state_image:
+              'off': /local/images/door_ngang.png
+              'on': /local/images/door_ngang_open.png
+            style:
+              left: 40.4%
+              top: 9.8%
+              width: 1%
+            type: image
+          - entity: binary_sensor.0x00158d0002d7426a_contact
+            state_image:
+              'off': /local/images/door1.png
+              'on': /local/images/door_open.png
+            style:
+              left: 11%
+              top: 64.1%
+              width: 9%
+            type: image
+          - entity: climate.ac_1
+            state_image:
+              cool: /local/images/ac.gif
+              'off': /local/images/ac_off.png
+            style:
+              left: 72%
+              top: 64.1%
+              width: 9%
+            type: image
+          - entity: climate.ac_2_2
+            state_image:
+              cool: /local/images/ac.gif
+              'off': /local/images/ac_off.png
+            style:
+              left: 72%
+              top: 35%
+              width: 9%
+            type: image
+          - entity: binary_sensor.0x00158d0002f98ec8_occupancy
+            state_image:
+              'off': /local/images/no.PNG
+              'on': /local/images/motion-sensor.png
+            style:
+              left: 70%
+              top: 50%
+              width: 9%
+            type: image
+          - entity: switch.fan_boss
+            state_image:
+              'off': /local/images/fan.png
+              'on': /local/images/fan-gif.gif
+            style:
+              left: 26%
+              top: 68%
+              width: 7%
+            tap_action:
+              action: toggle
+            type: image
+          - entity: switch.fan_asia
+            state_image:
+              'off': /local/images/fan.png
+              'on': /local/images/fan-gif.gif
+            style:
+              left: 36%
+              top: 24%
+              width: 7%
+            tap_action:
+              action: toggle
+            type: image
+          - entity: media_player.living_room_tv
+            state_image:
+              'off': /local/images/monitor.png
+              'on': /local/images/monitor_on.png
+            style:
+              left: 80%
+              top: 82%
+              width: 7%
+            type: image
+          - entity: switch.pk_1
+            state_image:
+              'off': /local/images/light_off.png
+              'on': /local/images/light_on.png
+            style:
+              left: 45%
+              top: 60%
+              width: 7%
+            tap_action:
+              action: toggle
+            type: image
+          - entity: sensor.0x00158d00033b04c7_temperature
+            style:
+              left: 89%
+              top: 51%
+            type: state-label
+          - entity: sensor.0x00158d00033b04c7_humidity
+            style:
+              left: 89%
+              top: 54%
+            type: state-label
+          - entity: sensor.0x00158d000316065d_temperature
+            style:
+              left: 89%
+              top: 42%
+            type: state-label
+          - entity: sensor.0x00158d000316065d_humidity
+            style:
+              left: 89%
+              top: 45%
+            type: state-label
+          - entity: sensor.0x00158d00032253f8_temperature
+            style:
+              left: 29%
+              top: 97%
+            type: state-label
+          - entity: sensor.0x00158d00032253f8_humidity
+            style:
+              left: 58%
+              top: 97%
+            type: state-label
+          - entity: switch.pk_1
+            style:
+              left: 61%
+              top: 12%
+            type: state-icon
+          - entity: switch.pk_1
+            style:
+              left: 61%
+              top: 28%
+            type: state-icon
+          - entity: switch.pk_1
+            style:
+              left: 61%
+              top: 44%
+            type: state-icon
+          - entity: switch.pk_1
+            style:
+              left: 61%
+              top: 60%
+            type: state-icon
+          - entity: switch.pk_1
+            style:
+              left: 61%
+              top: 76%
+            type: state-icon
+          - entity: switch.pk_1
+            style:
+              left: 61%
+              top: 92%
+            type: state-icon
+          - entity: switch.pk_1
+            style:
+              left: 45%
+              top: 92%
+            type: state-icon
+          - entity: switch.pk_1
+            style:
+              left: 29%
+              top: 92%
+            type: state-icon
+          - entity: switch.pk_1
+            style:
+              left: 29%
+              top: 76%
+            type: state-icon
+          - entity: switch.pk_1
+            style:
+              left: 29%
+              top: 60%
+            type: state-icon
+        image: /local/images/house.png
+        type: picture-elements
+    icon: 'mdi:map'
+    path: homemap
